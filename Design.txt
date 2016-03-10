@@ -7,6 +7,7 @@ Base requirements:
 	- Game is over after new block can be spawned
 	- 99 levels, the speed of the block is descending
 - At least 6 different blocks
+- Grid size should be dynamic
 - Highscores
 
 Extra challenge:
