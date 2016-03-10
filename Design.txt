@@ -1,0 +1,60 @@
+Simple Tetris design:
+
+Base requirements:
+- Works on webplayer
+- Basic tetris rules:
+	- Down arrow throws the block down immediately, but is movable for a while after it
+	- Game is over after new block can be spawned
+	- 99 levels, the speed of the block is descending
+- At least 6 different blocks
+- Highscores
+
+Extra challenge:
+- Adding new block should be made easy. Idea is that new block could be made by creating blockprefab and giving it blockpieces as a children. The positions of the children in block should be able to be set in inspector by script values.
+- Mobile version as well
+
+Scenes:
+- Main Menu
+- Main game
+
+------
+
+Components (in main game scene):
+
+- Game Controller
+	- Block descending
+	- Controls
+	- Spawns new blocks
+	
+- BlockGrid
+	- Blocks that are dropped down (stuck)
+	- Modifies grid (clears full rows, adds new blocks)
+
+- Block
+	- Holds block pieces of currently descending block
+	- Block piece:
+		- Simple object, has position and image
+		
+- Scoreboard
+	- Score calculation
+	- Highscores
+		- Saved to file
+
+- UI 
+	- Scoreboard
+	- Level
+	- Esc to abort, pause, options
+
+Other components:
+
+- Data holder
+	- Moves data between scenes
+	- Spawns at start, doesn't get destroyed
+	
+- Main menu UI
+	- Options
+	- Start game
+	- Quit game
+	
+---------
+
