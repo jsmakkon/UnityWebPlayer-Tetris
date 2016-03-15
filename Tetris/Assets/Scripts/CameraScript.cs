@@ -7,7 +7,7 @@ public class CameraScript : MonoBehaviour {
 
     public void setCameraPosition()
     {
-        BlockGridScript gridScript = blockGrid.GetComponent<BlockGridScript>();
+        GridScript gridScript = blockGrid.GetComponent<GridScript>();
 
         Camera.main.transform.position = new Vector3(gridScript.xSize/2.0f,gridScript.ySize/2.0f,-50);
         Camera.main.orthographicSize = Mathf.Max(gridScript.xSize/2.0f+1, gridScript.ySize/2.0f +1);

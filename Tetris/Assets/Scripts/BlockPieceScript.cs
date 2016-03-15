@@ -14,27 +14,26 @@ public class BlockPieceScript : MonoBehaviour {
         BlockScript parentScript = transform.parent.GetComponent<BlockScript>();
         xPos = parentScript.xPos + xOffset;
         yPos = parentScript.yPos + yOffset;
-        GameControllerScript.setPositionInUnity(gameObject, xPos, yPos);
     }
 
     public void RotateBlock(bool counterClock)
     {
-        if (counterClock)
+        if (!counterClock)
         {
             // Rotation matrix calculation
-            float x = (Mathf.Cos(Mathf.PI / 2)) * xPos + (-Mathf.Sin(Mathf.PI / 2)) * yPos;
-            float y = (Mathf.Sin(Mathf.PI / 2)) * xPos + (Mathf.Cos(Mathf.PI / 2)) * yPos;
+            float x = (Mathf.Cos(Mathf.PI / 2.0f)) * xOffset + (-Mathf.Sin(Mathf.PI / 2.0f)) * yOffset;
+            float y = (Mathf.Sin(Mathf.PI / 2.0f)) * xOffset + (Mathf.Cos(Mathf.PI / 2.0f)) * yOffset;
 
-            xPos = (int)x;
-            yPos = (int)y;
+            xOffset = (int)x;
+            yOffset = (int)y;
         }
         else
         {
-            float x = (Mathf.Cos(-Mathf.PI / 2)) * xPos + (-Mathf.Sin(-Mathf.PI / 2)) * yPos;
-            float y = (Mathf.Sin(-Mathf.PI / 2)) * xPos + (Mathf.Cos(-Mathf.PI / 2)) * yPos;
+            float x = (Mathf.Cos(-Mathf.PI / 2.0f)) * xOffset + (-Mathf.Sin(-Mathf.PI / 2.0f)) * yOffset;
+            float y = (Mathf.Sin(-Mathf.PI / 2.0f)) * xOffset + (Mathf.Cos(-Mathf.PI / 2.0f)) * yOffset;
 
-            xPos = (int)x;
-            yPos = (int)y;
+            xOffset = (int)x;
+            yOffset = (int)y;
         }
     }
 }
