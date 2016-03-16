@@ -31,7 +31,9 @@ public class GridScript : MonoBehaviour {
 
     private void getSizes()
     {
-        //TODO:take data from datacarrier
+        DataCarrierScript script = GameObject.Find("DataCarrier").GetComponent<DataCarrierScript>();
+        xSize = script.width;
+        ySize = script.height;
     }
     
     // Checks if block place is currently valid (not on top of other blocks or out of bounds).

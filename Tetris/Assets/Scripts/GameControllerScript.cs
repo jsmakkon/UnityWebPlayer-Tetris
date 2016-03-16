@@ -9,19 +9,28 @@ public class GameControllerScript : MonoBehaviour {
 
     public GameObject spawnPoint;
     public GameObject grid;
+    public GameObject pauseCanvas;
+    public GameObject gameOverCanvas;
+
     private GridScript gridScript;
     private GameObject currentBlock;
     private BlockScript currentBlockScript;
+    
 
     private ControlsScript controlsScript;
 
     public float startWaitTime = 1.0f;
+    public float downHitWaitTime = 0.5f;
 
     private float nextDrop;
     private float currentWaitTime = 1.0f;
 
+    private bool isRunning = true;
+    private float timeToDrop;
+
+    private bool isDownRepeated = false;
     
-    // Scene inits are here
+    // Scene inits start here:
     void Start()
     {
         controlsScript = GetComponent<ControlsScript>();
@@ -36,6 +45,8 @@ public class GameControllerScript : MonoBehaviour {
 
     void Update ()
     {
+        if (!isRunning) return;
+
         if (Time.time >= nextDrop)
         {
             currentBlockScript.moveBlockByDirection(Constants.Direction.DOWN, 1);
@@ -46,9 +57,15 @@ public class GameControllerScript : MonoBehaviour {
 
                 Destroy(currentBlock);
                 spawnBlock();
+                if (!gridScript.isBlockPositionValid(currentBlockScript))
+                {
+                    gameOverCanvas.SetActive(true);
+                }
             }
             nextDrop = Time.time + currentWaitTime;
+            isDownRepeated = false;
         }
+        
 
         controlsScript.checkInput();
 
@@ -67,12 +84,35 @@ public class GameControllerScript : MonoBehaviour {
         if (controlsScript.getVerticalInput() == Constants.Direction.UP)
         {
             currentBlockScript.RotateBlock();
+            if (!gridScript.isBlockPositionValid(currentBlockScript))
+                currentBlockScript.RotateBlock();
         }
-        else if (controlsScript.getVerticalInput() == Constants.Direction.DOWN)
+        else if (controlsScript.getVerticalInput() == Constants.Direction.DOWN && !isDownRepeated)
         {
             while (gridScript.isBlockPositionValid(currentBlockScript))
                 currentBlockScript.moveBlockByDirection(Constants.Direction.DOWN, 1);
             currentBlockScript.moveBlockByDirection(Constants.Direction.UP, 1);
+            nextDrop = Time.time + downHitWaitTime;
+            isDownRepeated = true;
+        }
+
+        if (controlsScript.getMenuInput())
+        {
+            toggleRunning();
+            pauseCanvas.SetActive(true);
+        }
+    }
+    // Pausing
+    public void toggleRunning()
+    {
+        if (isRunning) {
+            isRunning = false;
+            timeToDrop = nextDrop - Time.time;
+        }
+        else
+        {
+            isRunning = true;
+            nextDrop = timeToDrop + Time.time;
         }
     }
 
@@ -83,6 +123,7 @@ public class GameControllerScript : MonoBehaviour {
             gridScript.addBlockPieceToDowned(currentBlock.transform.GetChild(i).gameObject);
         }
     }
+    
 
     private void setSpawnPointPosition()
     {

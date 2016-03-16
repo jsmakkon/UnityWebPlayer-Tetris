@@ -4,6 +4,7 @@ using System.Collections;
 public class ControlsScript : MonoBehaviour {
     private Constants.Direction horizontal = Constants.Direction.NONE;
     private Constants.Direction vertical = Constants.Direction.NONE;
+    private bool menu;
 
     // Update is called once per frame
     public void checkInput () {
@@ -22,6 +23,12 @@ public class ControlsScript : MonoBehaviour {
             vertical = Constants.Direction.DOWN;
         else
             vertical = Constants.Direction.NONE;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+            menu = true;
+        else
+            menu = false;
+
         //}
         //Debug.Log("asdf "+ Input.GetJoystickNames().Length);
         /*
@@ -40,6 +47,11 @@ public class ControlsScript : MonoBehaviour {
             vertical = Constants.Direction.UP;
             */
 
+    }
+
+    public bool getMenuInput()
+    {
+        return menu;
     }
 
     public Constants.Direction getHorizontalInput()

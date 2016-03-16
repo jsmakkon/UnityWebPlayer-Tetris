@@ -22,18 +22,18 @@ public class BlockPieceScript : MonoBehaviour {
         {
             // Rotation matrix calculation
             float x = (Mathf.Cos(Mathf.PI / 2.0f)) * xOffset + (-Mathf.Sin(Mathf.PI / 2.0f)) * yOffset;
-            float y = (Mathf.Sin(Mathf.PI / 2.0f)) * xOffset + (Mathf.Cos(Mathf.PI / 2.0f)) * yOffset;
-
-            xOffset = (int)x;
-            yOffset = (int)y;
+            float y = (Mathf.Sin(Mathf.PI / 2.0f)) * xOffset + ( Mathf.Cos(Mathf.PI / 2.0f)) * yOffset;
+            
+            xOffset = Mathf.RoundToInt(x);
+            yOffset = Mathf.RoundToInt(y);
         }
         else
         {
             float x = (Mathf.Cos(-Mathf.PI / 2.0f)) * xOffset + (-Mathf.Sin(-Mathf.PI / 2.0f)) * yOffset;
             float y = (Mathf.Sin(-Mathf.PI / 2.0f)) * xOffset + (Mathf.Cos(-Mathf.PI / 2.0f)) * yOffset;
 
-            xOffset = (int)x;
-            yOffset = (int)y;
+            xOffset = Mathf.RoundToInt(x);
+            yOffset = Mathf.RoundToInt(y);
         }
     }
 }
