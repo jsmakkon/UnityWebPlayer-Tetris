@@ -21,7 +21,7 @@ public class DataCarrierScript : MonoBehaviour {
         readHighScore();
 	}
 
-    private void readHighScore()
+    public void readHighScore()
     {
         bestScore = PlayerPrefs.GetInt("TetrisBestScore");
     }

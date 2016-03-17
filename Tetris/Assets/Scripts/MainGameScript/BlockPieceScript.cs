@@ -36,4 +36,11 @@ public class BlockPieceScript : MonoBehaviour {
             yOffset = Mathf.RoundToInt(y);
         }
     }
+
+    public void updatePosition(int x, int y)
+    {
+        xPos = x;
+        yPos = y;
+        GameControllerScript.setPositionInUnity(gameObject, xPos, yPos);
+    }
 }

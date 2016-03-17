@@ -5,6 +5,7 @@ using System;
 public class BlockScript : MonoBehaviour {
 
     public bool doNotRotate = false;
+    public bool rotateOneWay = false;
 
     public int xPos;
     public int yPos;
@@ -14,6 +15,8 @@ public class BlockScript : MonoBehaviour {
     
     // Next rotate clockwise or counter-clockwise
     bool rotateClock = false;
+    bool isLastRotateClockWise = false;
+    
 
     // --------INITS---------
 
@@ -49,16 +52,30 @@ public class BlockScript : MonoBehaviour {
     //----- MOVEMENT ------
 
 
-    public void RotateBlock()
+    public void RotateBlock(bool isReverseRotation)
     {
+        if (doNotRotate) return;
+
+        // If block is clockwise only rotation
+        if (rotateOneWay)
+            rotateClock = true;
+        
+        // If we are reversing clockwise only rotation
+        if (isReverseRotation && rotateOneWay)
+        {
+            rotateClock = false;
+        }
+        
         for (int i = 0; i < transform.childCount; i++)
         {
             Transform child = transform.GetChild(i);
             child.gameObject.GetComponent<BlockPieceScript>().RotateBlock(rotateClock);
         }
-
-        if (rotateClock) rotateClock = false;
-        else rotateClock = true;
+        
+        if (rotateClock)
+            rotateClock = false;
+        else
+            rotateClock = true;
 
         updateChildPositions();
         setPositionToUnity();

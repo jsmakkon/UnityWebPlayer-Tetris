@@ -2,12 +2,13 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class ScoreBoard : MonoBehaviour {
+public class ScoreBoardScript : MonoBehaviour {
 
     public GameObject uiCanvas;
     private GameObject dataCarrier;
 
     private Text bestScoreText;
+    private Text currentScoreText;
 
     int currentScore;
     int bestScore;
@@ -17,18 +18,31 @@ public class ScoreBoard : MonoBehaviour {
         dataCarrier = GameObject.Find("DataCarrier");
         bestScore = dataCarrier.GetComponent<DataCarrierScript>().bestScore;
         bestScoreText = uiCanvas.transform.FindChild("BestScoreText").GetComponent<Text>();
-        //bestScoreText = GameObject.Find("BestScoreText").GetComponent<Text>();
+
+        currentScoreText = uiCanvas.transform.FindChild("CurrentScoreText").GetComponent<Text>();
+        currentScoreText.text = "Current score: " + currentScore;
         refreshBestScore();
     }
 
     public void addScore(int newScore)
     {
         currentScore += newScore;
+        currentScoreText.text = "Current score: " + currentScore;
     }
 
     public void refreshBestScore()
     {
         bestScoreText.text = "Best score: "+bestScore;
+    }
+
+    public void checkForBestScore()
+    {
+        if (currentScore > bestScore)
+        {
+            bestScore = currentScore;
+            writeBestScore();
+            dataCarrier.GetComponent<DataCarrierScript>().readHighScore();
+        }
     }
 
     private void writeBestScore()

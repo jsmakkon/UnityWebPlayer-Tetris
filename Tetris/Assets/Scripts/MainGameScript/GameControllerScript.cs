@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+using System;
 
 public class GameControllerScript : MonoBehaviour {
 
@@ -12,12 +12,16 @@ public class GameControllerScript : MonoBehaviour {
     public GameObject pauseCanvas;
     public GameObject gameOverCanvas;
     public GameObject dummyBlock;
+    public GameObject scoreBoard;
 
     private GridScript gridScript;
     private GameObject currentBlock;
     private BlockScript currentBlockScript;
     private DummyBlockScript dummyScript;
-    
+
+    public int pointsForBlock = 20;
+    public float waitTimeReductionPerLevel = 0.05f;
+    public float extraTimeAtBlockSpawn = 0.1f;
 
     private ControlsScript controlsScript;
 
@@ -26,9 +30,12 @@ public class GameControllerScript : MonoBehaviour {
 
     private float nextDrop;
     private float currentWaitTime = 1.0f;
+    
 
     private bool isRunning = true;
     private float timeToDrop;
+    public int rowsBetweenLevels = 5;
+    private int nextLevel;
 
     private bool isDownRepeated = false;
     
@@ -46,6 +53,7 @@ public class GameControllerScript : MonoBehaviour {
         spawnBlock();
 
         nextDrop = Time.time + startWaitTime;
+        nextLevel = rowsBetweenLevels;
     }
 
     void Update ()
@@ -54,25 +62,28 @@ public class GameControllerScript : MonoBehaviour {
 
         if (Time.time >= nextDrop)
         {
+            nextDrop = Time.time + currentWaitTime;
+            isDownRepeated = false;
+
             currentBlockScript.moveBlockByDirection(Constants.Direction.DOWN, 1);
             if (!gridScript.isBlockPositionValid(currentBlockScript))
             {
                 currentBlockScript.moveBlockByDirection(Constants.Direction.UP, 1);
                 setBlockToDowned();
+                doRowClear();
 
                 Destroy(currentBlock);
+                
                 spawnBlock();
                 if (!gridScript.isBlockPositionValid(currentBlockScript))
                 {
+                    scoreBoard.GetComponent<ScoreBoardScript>().checkForBestScore();
                     gameOverCanvas.SetActive(true);
                     toggleRunning();
                 }
+                nextDrop += extraTimeAtBlockSpawn;
             }
-            nextDrop = Time.time + currentWaitTime;
-            isDownRepeated = false;
         }
-        
-
         controlsScript.checkInput();
 
         if (controlsScript.getHorizontalInput() == Constants.Direction.LEFT)
@@ -89,9 +100,21 @@ public class GameControllerScript : MonoBehaviour {
         }
         if (controlsScript.getVerticalInput() == Constants.Direction.UP)
         {
-            currentBlockScript.RotateBlock();
+            currentBlockScript.RotateBlock(false);
+            int movedAmount = 0;
+            // Move block down if rotate causes block go out of bounds from top border
+            while (!gridScript.isBlockPositionValidTop(currentBlockScript))
+            {
+                currentBlockScript.moveBlockByDirection(Constants.Direction.DOWN, 1);
+                movedAmount++;
+            }
             if (!gridScript.isBlockPositionValid(currentBlockScript))
-                currentBlockScript.RotateBlock();
+            {
+                currentBlockScript.RotateBlock(true);
+                currentBlockScript.moveBlockByDirection(Constants.Direction.UP, movedAmount);
+            }
+                
+            
         }
         else if (controlsScript.getVerticalInput() == Constants.Direction.DOWN && !isDownRepeated)
         {
@@ -108,6 +131,22 @@ public class GameControllerScript : MonoBehaviour {
             pauseCanvas.SetActive(true);
         }
     }
+
+    private void doRowClear()
+    {
+        gridScript.checkFullRows();
+        while (gridScript.getRowsCleared() >= nextLevel)
+        {
+            nextLevel += rowsBetweenLevels;
+            addMoreDifficulty();
+        }
+    }
+
+    private void addMoreDifficulty()
+    {
+        currentWaitTime *= (1.0f - waitTimeReductionPerLevel);
+    }
+
     // Pausing
     public void toggleRunning()
     {
@@ -128,6 +167,8 @@ public class GameControllerScript : MonoBehaviour {
         {
             gridScript.addBlockPieceToDowned(currentBlock.transform.GetChild(i).gameObject);
         }
+        scoreBoard.GetComponent<ScoreBoardScript>().addScore(pointsForBlock);
+        
     }
     
 
