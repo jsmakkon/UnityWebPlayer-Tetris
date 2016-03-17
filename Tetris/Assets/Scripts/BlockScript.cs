@@ -17,6 +17,16 @@ public class BlockScript : MonoBehaviour {
 
     // --------INITS---------
 
+    public void doDummyInits()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            BlockPieceScript script = transform.GetChild(i).gameObject.GetComponent<BlockPieceScript>();
+            child.localPosition = new Vector3(script.xOffset, script.yOffset, 1);
+
+        }
+    }
     // initialize block position. Call this at spawn to set it to proper position in grid
     public void doBlockInits(int x, int y)
     {
@@ -24,6 +34,11 @@ public class BlockScript : MonoBehaviour {
         yPos = y + ySpawnOffset;
         updateChildPositions();
         setPositionToUnity();
+    }
+
+    public void setDummyPosToUnity(GameObject obj)
+    {
+        transform.position = obj.transform.position;
     }
     
     public void setPositionToUnity()

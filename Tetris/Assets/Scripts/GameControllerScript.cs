@@ -11,10 +11,12 @@ public class GameControllerScript : MonoBehaviour {
     public GameObject grid;
     public GameObject pauseCanvas;
     public GameObject gameOverCanvas;
+    public GameObject dummyBlock;
 
     private GridScript gridScript;
     private GameObject currentBlock;
     private BlockScript currentBlockScript;
+    private DummyBlockScript dummyScript;
     
 
     private ControlsScript controlsScript;
@@ -35,9 +37,12 @@ public class GameControllerScript : MonoBehaviour {
     {
         controlsScript = GetComponent<ControlsScript>();
         gridScript = grid.GetComponent<GridScript>();
+        dummyScript = dummyBlock.GetComponent<DummyBlockScript>();
 
         gridScript.initGrid();
         setSpawnPointPosition();
+        dummyScript.createNewDummy();
+        dummyScript.setPosition(gridScript.xSize + 4, 4);
         spawnBlock();
 
         nextDrop = Time.time + startWaitTime;
@@ -60,6 +65,7 @@ public class GameControllerScript : MonoBehaviour {
                 if (!gridScript.isBlockPositionValid(currentBlockScript))
                 {
                     gameOverCanvas.SetActive(true);
+                    toggleRunning();
                 }
             }
             nextDrop = Time.time + currentWaitTime;
@@ -141,7 +147,8 @@ public class GameControllerScript : MonoBehaviour {
 
     public void spawnBlock()
     {
-        int spawnBlockIndex = Random.Range(0, blockPrefabs.Count);
+        //int spawnBlockIndex = Random.Range(0, blockPrefabs.Count);
+        int spawnBlockIndex = dummyScript.dummyBlockIndex;
 
         GameObject block = (GameObject)Instantiate(blockPrefabs[spawnBlockIndex],spawnPoint.transform.position, Quaternion.identity);
         block.name = "DescendingBlock";
@@ -150,6 +157,7 @@ public class GameControllerScript : MonoBehaviour {
         block.GetComponent<BlockScript>().doBlockInits(spawnPointScript.xPos, spawnPointScript.yPos);
         currentBlock = block;
         currentBlockScript = block.GetComponent<BlockScript>(); // For performance
+        dummyScript.createNewDummy();
     }
 
 }
