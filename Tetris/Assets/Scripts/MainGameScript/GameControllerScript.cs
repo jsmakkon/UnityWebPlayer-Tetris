@@ -58,6 +58,13 @@ public class GameControllerScript : MonoBehaviour {
 
     void Update ()
     {
+        controlsScript.checkInput();
+        
+        if (controlsScript.getMenuInput())
+        {
+            togglePause();
+        }
+
         if (!isRunning) return;
 
         if (Time.time >= nextDrop)
@@ -84,8 +91,7 @@ public class GameControllerScript : MonoBehaviour {
                 nextDrop += extraTimeAtBlockSpawn;
             }
         }
-        controlsScript.checkInput();
-
+        
         if (controlsScript.getHorizontalInput() == Constants.Direction.LEFT)
         {
             currentBlockScript.moveBlockByDirection(Constants.Direction.LEFT, 1);
@@ -125,11 +131,7 @@ public class GameControllerScript : MonoBehaviour {
             isDownRepeated = true;
         }
 
-        if (controlsScript.getMenuInput())
-        {
-            toggleRunning();
-            pauseCanvas.SetActive(true);
-        }
+        
     }
 
     private void doRowClear()
@@ -147,6 +149,15 @@ public class GameControllerScript : MonoBehaviour {
         currentWaitTime *= (1.0f - waitTimeReductionPerLevel);
     }
 
+    private void togglePause()
+    {
+        toggleRunning();
+        if (pauseCanvas.activeInHierarchy)
+            pauseCanvas.SetActive(false);
+        else
+            pauseCanvas.SetActive(true);
+    }
+    
     // Pausing
     public void toggleRunning()
     {

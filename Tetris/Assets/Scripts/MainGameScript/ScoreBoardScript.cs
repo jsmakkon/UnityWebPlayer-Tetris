@@ -20,19 +20,19 @@ public class ScoreBoardScript : MonoBehaviour {
         bestScoreText = uiCanvas.transform.FindChild("BestScoreText").GetComponent<Text>();
 
         currentScoreText = uiCanvas.transform.FindChild("CurrentScoreText").GetComponent<Text>();
-        currentScoreText.text = "Current score: " + currentScore;
+        currentScoreText.text = "Current score:\n" + currentScore;
         refreshBestScore();
     }
 
     public void addScore(int newScore)
     {
         currentScore += newScore;
-        currentScoreText.text = "Current score: " + currentScore;
+        currentScoreText.text = "Current score:\n" + currentScore;
     }
 
     public void refreshBestScore()
     {
-        bestScoreText.text = "Best score: "+bestScore;
+        bestScoreText.text = "Best score:\n"+bestScore;
     }
 
     public void checkForBestScore()

@@ -1,8 +1,6 @@
-Android_TD/Library/
-Android_TD/Temp/
+Tetris/Library/
+Tetris/Temp/
 _UpgradeReport_Files/
-
-Android_TD/test.apk
 
 *.suo
 *.sln

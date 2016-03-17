@@ -15,7 +15,6 @@ public class BlockScript : MonoBehaviour {
     
     // Next rotate clockwise or counter-clockwise
     bool rotateClock = false;
-    bool isLastRotateClockWise = false;
     
 
     // --------INITS---------
